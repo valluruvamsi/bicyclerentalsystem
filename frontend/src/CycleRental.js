@@ -50,9 +50,9 @@ const CycleRental = () => {
                 </a>
             </nav>
             <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4">
-                <CycleCard brand="AHOY" price="Rs. 150/day" image="/images/cycle1.jpg" />
-                <CycleCard brand="Urban Terrain" price="Rs.300/day" image="/images/cycle2.jpg" />
-                <CycleCard brand="GHM" price="Rs.500/day" image="/images/cycle3.jpg" />
+                <CycleCard brand="AHOY - Ungeared" price="Rs. 150/day" image="/images/cycle1.jpg" />
+                <CycleCard brand="Urban Terrain - 21 Shifters" price="Rs.300/day" image="/images/cycle2.jpg" />
+                <CycleCard brand="GHM - Hybrid" price="Rs.500/day" image="/images/cycle3.jpg" />
             </div>
         </div>
     );
