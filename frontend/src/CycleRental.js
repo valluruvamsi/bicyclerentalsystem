@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import API from './api';
 
 const NAVBAR_CLASS = "flex items-center justify-between px-4 py-2 bg-primary";
 const BRANDING_CLASS = "text-2xl font-bold text-black cursor-pointer";
@@ -8,7 +9,7 @@ const BUTTON_CLASS = "w-full py-2 rounded-lg hover:bg-gray-800 transition-colors
 const PRICE_CLASS = "text-sm font-semibold text-muted-foreground mt-2";
 const TEXT_CLASS = "text-lg font-medium mt-1";
 
-const CycleCard = ({ brand, price, image }) => {
+const CycleCard = ({ brand, price, image, available }) => {
     const [buttonClicked, setButtonClicked] = React.useState(false);
 
     const handleRentButtonClick = () => {
@@ -28,8 +29,9 @@ const CycleCard = ({ brand, price, image }) => {
                     <button
                         className={`${BUTTON_CLASS} ${buttonClicked ? 'animate-pulse' : ''}`}
                         onClick={handleRentButtonClick}
+                        disabled={!available}
                     >
-                        {buttonClicked ? 'Renting...' : 'Rent Now'}
+                        {buttonClicked ? 'Renting...' : (available ? 'Rent Now' : 'Unavailable')}
                     </button>
                 </div>
             </div>
@@ -38,21 +40,29 @@ const CycleCard = ({ brand, price, image }) => {
 };
 
 const CycleRental = () => {
-    const reloadPage = () => {
-        window.location.reload();
-    };
+    const [cycles, setCycles] = useState([]);
+
+    useEffect(() => {
+        API.get('/cycles')
+            .then(response => {
+                setCycles(response.data);
+            })
+            .catch(error => {
+                console.error('There was an error fetching the cycles!', error);
+            });
+    }, []);
 
     return (
         <div className="bg-background text-primary-foreground min-h-screen">
             <nav className={NAVBAR_CLASS}>
-                <a href="/" className={BRANDING_CLASS} onClick={reloadPage}>
+                <a href="/" className={BRANDING_CLASS}>
                     Cycle Rental System
                 </a>
             </nav>
             <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4">
-                <CycleCard brand="AHOY - Ungeared" price="Rs. 150/day" image="/images/cycle1.jpg" />
-                <CycleCard brand="Urban Terrain - 21 Shifters" price="Rs.300/day" image="/images/cycle2.jpg" />
-                <CycleCard brand="GHM - Hybrid" price="Rs.500/day" image="/images/cycle3.jpg" />
+                {cycles.map(cycle => (
+                    <CycleCard key={cycle._id} {...cycle} />
+                ))}
             </div>
         </div>
     );
